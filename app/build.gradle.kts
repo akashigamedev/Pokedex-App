@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.hiltAndroid)
 }
 
 android {
@@ -66,4 +68,15 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.hilt.common)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.palette)
+    // Retrofit for network requests
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
