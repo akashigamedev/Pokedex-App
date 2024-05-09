@@ -1,6 +1,7 @@
 package com.akashi.pokedex.presentation.pokemondetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,11 +11,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -77,92 +81,28 @@ fun PokemonDetailScreen(
                     .background(primaryColor)
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    Row(
+                    PokemonDetailTopSection(
+                        pokemon = pokemonInfo.data,
+                        navController = navController,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = pokemonName.capitalize(Locale.ROOT),
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                            )
-                        }
-                        Text(
-                            text = "#${pokemonInfo.data.id}",
-                            color = Color.White,
-                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                    }
-                    Column(
+                            .fillMaxHeight(0.1f)
+                    )
+                    PokemonDetailStateWrapper(
+                        pokemon = pokemonInfo.data,
+                        pokemonSpecies = pokemonSpecies,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = pokemonImageSize / 1.4f, start = 8.dp, end = 8.dp, bottom = 8.dp)
+                            .padding(
+                                top = topPadding + pokemonImageSize / 2f + 25.dp,
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 16.dp
+                            )
                             .clip(RoundedCornerShape(16.dp))
-                            .background(Color.White)
-                    ) {
-                        Spacer(modifier = Modifier.height(50.dp))
-                        PokemonTypeSection(types = pokemonInfo.data.types)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "About",
-                            color = primaryColor,
-                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        PokemonDetailDataSection(
-                            pokemonWeight = pokemonInfo.data.weight,
-                            pokemonHeight = pokemonInfo.data.height,
-                            pokemonMoves = pokemonInfo.data.moves,
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        when (pokemonSpecies) {
-                            is Resource.Error -> {
-                                Text(
-                                    text = pokemonSpecies.message!!,
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                )
-                            }
-
-                            is Resource.Loading -> {
-                                CircularProgressIndicator(
-                                    color = LightRed, modifier = Modifier
-                                        .size(25.dp)
-                                        .padding(horizontal = 16.dp)
-                                )
-                            }
-
-                            is Resource.Success -> {
-                                Text(
-                                    text = pokemonSpecies.data!!.flavor_text_entries[0].flavor_text.replace("\n", " "),
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = "Base Stats",
-                            color = primaryColor,
-                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
+                            .background(Color.White),
+                        primaryColor = primaryColor,
+                    )
                 }
                 Icon(
                     painter = painterResource(id = R.drawable.pokeball),
@@ -182,10 +122,18 @@ fun PokemonDetailScreen(
                     },
                     imageOptions = ImageOptions(contentDescription = pokemonInfo.data.name),
                     modifier = Modifier
-                        .padding(80.dp)
                         .size(pokemonImageSize)
                         .align(Alignment.TopCenter)
-                )
+                        .offset(y = topPadding + 50.dp)
+                ) {
+                    CircularProgressIndicator(
+                        color = LightRed,
+                        modifier = Modifier
+                            .size(100.dp)
+                            .align(Alignment.TopCenter)
+                            .offset(y = topPadding + 50.dp)
+                    )
+                }
             }
         }
 
@@ -208,6 +156,112 @@ fun PokemonDetailScreen(
 
             }
         }
+    }
+}
+
+@Composable
+fun PokemonDetailStateWrapper(
+    pokemon: Pokemon,
+    pokemonSpecies: Resource<PokemonSpecies>,
+    modifier: Modifier,
+    primaryColor: Color,
+) {
+    val scrollState = rememberScrollState()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
+        Spacer(modifier = Modifier.height(50.dp))
+        PokemonTypeSection(types = pokemon.types)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "About",
+            color = primaryColor,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        PokemonDetailDataSection(
+            pokemonWeight = pokemon.weight,
+            pokemonHeight = pokemon.height,
+            pokemonMoves = pokemon.moves,
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        when (pokemonSpecies) {
+            is Resource.Error -> {
+                Text(
+                    text = pokemonSpecies.message!!,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
+            is Resource.Loading -> {
+                CircularProgressIndicator(
+                    color = LightRed, modifier = Modifier
+                        .size(25.dp)
+                        .padding(horizontal = 16.dp)
+                )
+            }
+
+            is Resource.Success -> {
+                Text(
+                    text = pokemonSpecies.data!!.flavor_text_entries[0].flavor_text.replace(
+                        "\n",
+                        " "
+                    ),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Base Stats",
+            color = primaryColor,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+    }
+}
+
+@Composable
+fun PokemonDetailTopSection(pokemon: Pokemon, navController: NavController, modifier: Modifier) {
+    Row(
+        modifier = modifier.padding(horizontal = 24.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .clickable {
+                        navController.navigateUp()
+                    }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = pokemon.name.capitalize(Locale.ROOT),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = MaterialTheme.typography.headlineMedium.fontSize
+            )
+        }
+        val paddedId = pokemon.id.toString().padStart(3, '0')
+        Text(
+            text = "#${paddedId}",
+            color = Color.White,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold
+        )
+
     }
 }
 
@@ -269,12 +323,15 @@ fun PokemonDetailDataSection(
                     for (i in 1..2) {
                         Text(
                             text = pokemonMoves[i].move.name.capitalize(Locale.ROOT),
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize
                         )
                     }
                 } else {
                     for (move in pokemonMoves) {
-                        Text(text = move.move.name.capitalize(Locale.ROOT))
+                        Text(
+                            text = move.move.name.capitalize(Locale.ROOT),
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                        )
                     }
                 }
             }
@@ -303,7 +360,9 @@ fun PokemonDetailDataItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(painter = dataIcon, contentDescription = null, tint = Color.Black)
-            Text(text = "$dataValue $dataUnit")
+            Text(text = "$dataValue $dataUnit",
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            )
         }
         Text(
             text = itemLabel,
@@ -333,11 +392,10 @@ fun PokemonTypeSection(
                 Text(
                     text = type.type.name.capitalize(Locale.ROOT),
                     color = Color.White,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
                     fontWeight = FontWeight.Bold
                 )
             }
         }
     }
-
 }
