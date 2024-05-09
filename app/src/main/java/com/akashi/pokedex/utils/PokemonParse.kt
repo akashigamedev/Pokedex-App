@@ -1,6 +1,7 @@
 package com.akashi.pokedex.utils
 
 import androidx.compose.ui.graphics.Color
+import com.akashi.pokedex.data.remote.responses.pokemon_info.Stat
 import com.akashi.pokedex.data.remote.responses.pokemon_info.Type
 import com.akashi.pokedex.ui.theme.TypeBug
 import com.akashi.pokedex.ui.theme.TypeDark
@@ -43,5 +44,18 @@ fun parseTypeToColor(type: Type): Color {
         "steel" -> TypeSteel
         "fairy" -> TypeFairy
         else -> Color.Black
+    }
+}
+
+
+fun parseStatToAbbr(stat: Stat): String {
+    return when(stat.stat.name.lowercase()) {
+        "hp" -> "HP"
+        "attack" -> "ATK"
+        "defense" -> "DEF"
+        "special-attack" -> "SATK"
+        "special-defense" -> "SDEF"
+        "speed" -> "SPD"
+        else -> ""
     }
 }

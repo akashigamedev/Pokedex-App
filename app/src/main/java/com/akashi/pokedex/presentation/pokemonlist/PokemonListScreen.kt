@@ -64,7 +64,7 @@ fun PokemonListScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Column {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -155,30 +155,34 @@ fun PokemonList(
     val endReached by remember {
         viewModel.endReached
     }
-
-    LazyVerticalGrid(columns = GridCells.Fixed(3),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
-            .padding(horizontal = 8.dp, vertical = 16.dp),
-        content = {
-            items(pokemonList) {
-                if (it == pokemonList[pokemonList.size - 1] && !isLoading && !isSearching && !endReached) {
-                    viewModel.loadPokemonPaginated()
-                }
-                PokemonCard(pokemon = it,  navController = navController)
-            }
-        })
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        LazyVerticalGrid(columns = GridCells.Fixed(3),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+            .fillMaxSize()
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(horizontal = 8.dp, vertical = 16.dp),
+            content = {
+                items(pokemonList) {
+                    if (it == pokemonList[pokemonList.size - 1] && !isLoading && !isSearching && !endReached) {
+                        viewModel.loadPokemonPaginated()
+                    }
+                    PokemonCard(pokemon = it, navController = navController)
+                }
+            })
         if (isLoading) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            CircularProgressIndicator(
+                color = LightRed,
+                modifier = Modifier
+                    .size(50.dp)
+                    .align(Alignment.Center)
+            )
         }
         if (loadError.isNotEmpty()) {
             RetrySection(error = loadError) {
