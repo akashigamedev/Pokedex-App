@@ -1,7 +1,5 @@
 package com.akashi.pokedex.presentation.pokemonlist
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,15 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.akashi.pokedex.R
 import com.akashi.pokedex.data.model.PokemonModel
-import com.akashi.pokedex.ui.theme.DarkBlue
 import com.akashi.pokedex.ui.theme.DarkGray
 import com.akashi.pokedex.ui.theme.LightGray
 import com.akashi.pokedex.ui.theme.LightRed
-import com.akashi.pokedex.ui.theme.TextBlue
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 
@@ -175,7 +170,7 @@ fun PokemonList(
                 if (it == pokemonList[pokemonList.size - 1] && !isLoading && !isSearching && !endReached) {
                     viewModel.loadPokemonPaginated()
                 }
-                PokemonCard(pokemon = it, navController = navController)
+                PokemonCard(pokemon = it,  navController = navController)
             }
         })
     Box(
@@ -201,7 +196,9 @@ fun PokemonCard(pokemon: PokemonModel, navController: NavController) {
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp), clip = true)
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
-            .clickable { },
+            .clickable {
+                navController.navigate("pokemon_detail_screen/${pokemon.name}")
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(
