@@ -3,6 +3,11 @@ package com.akashi.pokedex.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val LightBlue = Color(0xFFBAC7FF)
+val DarkBlue = Color(0xFF31325C)
+val TextBlue = Color(0xFF545586)
+val LightGray = Color(0xFFF0F2F2)
+val DarkGray = Color(0xFF9999B6)
+val LightRed = Color(0xFFE72D4C)
 
 val TypeGrass = Color(0xFF74CB48)
 val TypeFire = Color(0xFFF57D31)
