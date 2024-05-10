@@ -217,12 +217,16 @@ fun PokemonDetailStateWrapper(
                 )
             }
 
+
             is Resource.Success -> {
+                val description = pokemonSpecies.data?.flavor_text_entries
+                    ?.firstOrNull { it.language.name == "en" }
+                    ?.flavor_text
+                    ?.replace("\n", " ")
+                    ?.lowercase()
+                    ?.capitalize(Locale.ROOT) ?: ""
                 Text(
-                    text = pokemonSpecies.data!!.flavor_text_entries[0].flavor_text.replace(
-                        "\n",
-                        " "
-                    ).lowercase().capitalize(Locale.ROOT),
+                    text = description,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
