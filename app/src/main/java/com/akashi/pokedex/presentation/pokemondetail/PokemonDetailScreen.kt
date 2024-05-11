@@ -134,7 +134,17 @@ fun PokemonDetailScreen(
                         .size(pokemonImageSize)
                         .align(Alignment.TopCenter)
                         .offset(y = topPadding + 50.dp),
-                    loading = { CircularProgressIndicator(color = LightRed, modifier = Modifier.size(20.dp).align(Alignment.TopCenter))},
+                    loading = {
+                        Box(modifier = Modifier
+                            .fillMaxSize()) {
+                            CircularProgressIndicator(
+                                color = LightRed,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .align(Alignment.Center)
+                            )
+                        }
+                    },
                     onError = {
                         url =
                             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonInfo.data.id}.png"

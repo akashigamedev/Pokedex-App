@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,7 +99,7 @@ fun SearchBar(
     modifier: Modifier = Modifier,
     onSearch: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
+    var text by rememberSaveable { mutableStateOf("") }
 
     TextField(
         value = text,
@@ -176,6 +178,7 @@ fun PokemonList(
         }
         if (loadError.isNotEmpty()) {
             RetrySection(error = loadError) {
+                viewModel.loadData()
             }
         }
     }
@@ -231,12 +234,13 @@ fun RetrySection(
     error: String,
     onRetry: () -> Unit
 ) {
-    Column {
+    Column(modifier = Modifier.padding(top = 32.dp)) {
         Text(error, color = Color.Red, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = { onRetry() },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            colors = ButtonColors(containerColor = LightRed, contentColor = Color.White, disabledContainerColor = LightRed, disabledContentColor = Color.White)
         ) {
             Text(text = "Retry")
         }

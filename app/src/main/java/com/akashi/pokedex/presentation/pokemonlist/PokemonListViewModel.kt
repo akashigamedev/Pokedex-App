@@ -27,6 +27,10 @@ class PokemonListViewModel @Inject constructor(
     private var readyToSearch = true
 
     init {
+        loadData()
+    }
+
+    fun loadData() {
         viewModelScope.launch {
             val localPokemonList = localRepository.getPokemonList()
             if (localPokemonList.isEmpty()) {
@@ -81,7 +85,7 @@ class PokemonListViewModel @Inject constructor(
             cachedPokemonList
         }
         viewModelScope.launch(Dispatchers.Default) {
-            if (query.isEmpty()) {
+            if (query.isBlank() || query.isEmpty()) {
                 pokemonList.value = cachedPokemonList
                 readyToSearch = true
                 return@launch
