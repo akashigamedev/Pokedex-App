@@ -1,7 +1,6 @@
 package com.akashi.pokedex.presentation.pokemondetail
 
 import androidx.lifecycle.ViewModel
-import com.akashi.pokedex.data.model.PokemonModel
 import com.akashi.pokedex.data.remote.responses.pokemon_info.Pokemon
 import com.akashi.pokedex.data.remote.responses.pokemon_species.PokemonSpecies
 import com.akashi.pokedex.repository.PokemonRepository

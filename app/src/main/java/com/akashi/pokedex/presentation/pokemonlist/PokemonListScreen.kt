@@ -1,5 +1,6 @@
 package com.akashi.pokedex.presentation.pokemonlist
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,10 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,14 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.request.ImageRequest
+import coil.compose.rememberAsyncImagePainter
 import com.akashi.pokedex.R
-import com.akashi.pokedex.data.model.PokemonModel
+import com.akashi.pokedex.data.model.SimplePokemon
 import com.akashi.pokedex.ui.theme.DarkGray
 import com.akashi.pokedex.ui.theme.LightGray
 import com.akashi.pokedex.ui.theme.LightRed
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
 fun PokemonListScreen(
@@ -149,12 +147,7 @@ fun PokemonList(
     val isLoading by remember {
         viewModel.isLoading
     }
-    val isSearching by remember {
-        viewModel.isSearching
-    }
-    val endReached by remember {
-        viewModel.endReached
-    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -163,16 +156,13 @@ fun PokemonList(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
-            .fillMaxSize()
+                .fillMaxSize()
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.White)
                 .padding(horizontal = 8.dp, vertical = 16.dp),
             content = {
-                items(pokemonList) {
-                    if (it == pokemonList[pokemonList.size - 1] && !isLoading && !isSearching && !endReached) {
-                        viewModel.loadPokemonPaginated()
-                    }
+                items(pokemonList, key = {it.number}, contentType = {it}) {
                     PokemonCard(pokemon = it, navController = navController)
                 }
             })
@@ -186,15 +176,13 @@ fun PokemonList(
         }
         if (loadError.isNotEmpty()) {
             RetrySection(error = loadError) {
-                viewModel.loadPokemonPaginated()
             }
         }
     }
 }
 
 @Composable
-fun PokemonCard(pokemon: PokemonModel, navController: NavController) {
-    val context = LocalContext.current
+fun PokemonCard(pokemon: SimplePokemon, navController: NavController) {
     Box(
         modifier = Modifier
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp), clip = true)
@@ -212,30 +200,19 @@ fun PokemonCard(pokemon: PokemonModel, navController: NavController) {
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = pokemon.number,
+                text = pokemon.number.toString().padStart(3, '0'),
                 color = Color.LightGray,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 textAlign = TextAlign.End
             )
-            CoilImage(
-                imageRequest = {
-                    ImageRequest.Builder(context)
-                        .data(pokemon.imageUrl)
-                        .build()
-                },
-                imageOptions = ImageOptions(
-                    contentDescription = pokemon.name
-                ),
+            val painter = rememberAsyncImagePainter(model = pokemon.imageUrl, filterQuality = FilterQuality.None)
+            Image(
+                painter = painter,
+                contentDescription = pokemon.name,
                 modifier = Modifier
                     .size(72.dp)
                     .align(Alignment.CenterHorizontally)
-            ) {
-                CircularProgressIndicator(
-                    color = LightRed,
-                    modifier = Modifier.scale(0.5f)
-                )
-            }
-
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 modifier = Modifier.fillMaxWidth(),

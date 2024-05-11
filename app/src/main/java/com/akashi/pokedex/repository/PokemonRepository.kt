@@ -13,7 +13,7 @@ class PokemonRepository @Inject constructor(
     private val api: PokeAPI
 ) {
 
-    suspend fun getPokemonList(limit: Int, offset: Int): Resource<PokemonList> {
+    suspend fun getPokemonList(limit: Int = 100000, offset: Int = 0): Resource<PokemonList> {
         val response = try {
             api.getPokemonList(limit, offset)
         } catch (e: Exception) {

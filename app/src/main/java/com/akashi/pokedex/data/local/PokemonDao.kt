@@ -9,7 +9,7 @@ import com.akashi.pokedex.data.model.SimplePokemon
 @Dao
 interface PokemonDao {
     @Query("SELECT * from SimplePokemon")
-    fun getPokemonList(): List<SimplePokemon>
+    suspend fun getPokemonList(): List<SimplePokemon>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemonList(pokemonList: List<SimplePokemon>)

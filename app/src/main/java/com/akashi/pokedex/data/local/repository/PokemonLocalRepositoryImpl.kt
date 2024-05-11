@@ -7,7 +7,7 @@ import com.akashi.pokedex.domain.local.PokemonLocalRepository
 class PokemonLocalRepositoryImpl(
     private val dao: PokemonDao
 ) : PokemonLocalRepository{
-    override fun getPokemonList(): List<SimplePokemon> {
+    override suspend fun getPokemonList(): List<SimplePokemon> {
         return dao.getPokemonList()
     }
 

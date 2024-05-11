@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class SimplePokemon (
-    @PrimaryKey val number: String,
+    @PrimaryKey val number: Int,
     val name: String,
     val imageUrl: String,
 )
