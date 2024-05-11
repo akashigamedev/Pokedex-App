@@ -81,4 +81,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.coil.compose)
     implementation(libs.landscapist.coil)
+    implementation(libs.room.ktx)
+    implementation(libs.room.common)
+    kapt(libs.room.compiler)
 }
