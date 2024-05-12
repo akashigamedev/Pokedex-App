@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,6 +20,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
@@ -131,7 +134,7 @@ fun SearchBar(
                 tint = LightRed,
                 modifier = Modifier.size(24.dp)
             )
-        }
+        },
     )
 }
 
@@ -164,7 +167,7 @@ fun PokemonList(
                 .background(Color.White)
                 .padding(horizontal = 8.dp, vertical = 16.dp),
             content = {
-                items(pokemonList, key = {it.number}, contentType = {it}) {
+                items(pokemonList, key = { it.number }, contentType = { it }) {
                     PokemonCard(pokemon = it, navController = navController)
                 }
             })
@@ -208,7 +211,10 @@ fun PokemonCard(pokemon: SimplePokemon, navController: NavController) {
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 textAlign = TextAlign.End
             )
-            val painter = rememberAsyncImagePainter(model = pokemon.imageUrl, filterQuality = FilterQuality.None)
+            val painter = rememberAsyncImagePainter(
+                model = pokemon.imageUrl,
+                filterQuality = FilterQuality.None
+            )
             Image(
                 painter = painter,
                 contentDescription = pokemon.name,
@@ -240,7 +246,12 @@ fun RetrySection(
         Button(
             onClick = { onRetry() },
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            colors = ButtonColors(containerColor = LightRed, contentColor = Color.White, disabledContainerColor = LightRed, disabledContentColor = Color.White)
+            colors = ButtonColors(
+                containerColor = LightRed,
+                contentColor = Color.White,
+                disabledContainerColor = LightRed,
+                disabledContentColor = Color.White
+            )
         ) {
             Text(text = "Retry")
         }

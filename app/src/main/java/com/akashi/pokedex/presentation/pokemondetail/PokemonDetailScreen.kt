@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -46,6 +45,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -135,8 +135,10 @@ fun PokemonDetailScreen(
                         .align(Alignment.TopCenter)
                         .offset(y = topPadding + 50.dp),
                     loading = {
-                        Box(modifier = Modifier
-                            .fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
                             CircularProgressIndicator(
                                 color = LightRed,
                                 modifier = Modifier
@@ -244,12 +246,12 @@ fun PokemonDetailStateWrapper(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PokemonDetailTopSection(pokemon: Pokemon, navController: NavController, modifier: Modifier) {
-    FlowRow(
+    Row(
         modifier = modifier.padding(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalArrangement = Arrangement.Center
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(0.7f)) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Go Back",
@@ -266,7 +268,9 @@ fun PokemonDetailTopSection(pokemon: Pokemon, navController: NavController, modi
                 text = pokemon.name.replaceFirstChar { it.uppercase() },
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         val paddedId = pokemon.id.toString().padStart(3, '0')
@@ -275,6 +279,8 @@ fun PokemonDetailTopSection(pokemon: Pokemon, navController: NavController, modi
             color = Color.White,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(0.3f)
         )
 
     }
