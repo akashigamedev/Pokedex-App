@@ -1,8 +1,15 @@
 package com.akashi.pokedex.data.remote.responses.pokemon_info
 
+
+import com.google.gson.annotations.SerializedName
+
 data class Other(
-    val dream_world: DreamWorld,
+    @SerializedName("dream_world")
+    val dreamWorld: DreamWorld,
+    @SerializedName("home")
     val home: Home,
-    val official_artwork: OfficialArtwork,
+    @SerializedName("official-artwork")
+    val officialArtwork: OfficialArtwork,
+    @SerializedName("showdown")
     val showdown: Showdown
 )

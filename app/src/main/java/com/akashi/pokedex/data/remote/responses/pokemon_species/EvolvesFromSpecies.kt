@@ -1,9 +1,9 @@
-package com.akashi.pokedex.data.remote.responses.pokemon_info
+package com.akashi.pokedex.data.remote.responses.pokemon_species
 
 
 import com.google.gson.annotations.SerializedName
 
-data class MoveLearnMethod(
+data class EvolvesFromSpecies(
     @SerializedName("name")
     val name: String,
     @SerializedName("url")

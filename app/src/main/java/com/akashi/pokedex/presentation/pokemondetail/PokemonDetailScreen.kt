@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -226,9 +225,9 @@ fun PokemonDetailStateWrapper(
 
 
             is Resource.Success -> {
-                val description = pokemonSpecies.data?.flavor_text_entries
+                val description = pokemonSpecies.data?.flavorTextEntries
                     ?.firstOrNull { it.language.name == "en" }
-                    ?.flavor_text
+                    ?.flavorText
                     ?.replace("\n", " ")
                     ?.lowercase()
                     ?.replaceFirstChar { it.uppercase() } ?: ""
@@ -243,7 +242,6 @@ fun PokemonDetailStateWrapper(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PokemonDetailTopSection(pokemon: Pokemon, navController: NavController, modifier: Modifier) {
     Row(
@@ -430,7 +428,7 @@ fun PokemonStat(
     animDelay: Int = 0
 ) {
 
-    val statValue = stat.base_stat
+    val statValue = stat.baseStat
     var statMaxValue by remember {
         mutableIntStateOf(statValue)
     }
@@ -508,7 +506,7 @@ fun PokemonBaseStats(
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 for (stat in pokemon.stats) {
-                    val paddedStatValue = stat.base_stat.toString().padStart(3, '0')
+                    val paddedStatValue = stat.baseStat.toString().padStart(3, '0')
                     Text(text = paddedStatValue)
                 }
             }

@@ -1,31 +1,61 @@
 package com.akashi.pokedex.data.remote.responses.pokemon_species
 
+
+import com.google.gson.annotations.SerializedName
+
 data class PokemonSpecies(
-    val base_happiness: Int,
-    val capture_rate: Int,
+    @SerializedName("base_happiness")
+    val baseHappiness: Int,
+    @SerializedName("capture_rate")
+    val captureRate: Int,
+    @SerializedName("color")
     val color: Color,
-    val egg_groups: List<EggGroup>,
-    val evolution_chain: EvolutionChain,
-    val evolves_from_species: Any,
-    val flavor_text_entries: List<FlavorTextEntry>,
-    val form_descriptions: List<Any>,
-    val forms_switchable: Boolean,
-    val gender_rate: Int,
+    @SerializedName("egg_groups")
+    val eggGroups: List<EggGroup>,
+    @SerializedName("evolution_chain")
+    val evolutionChain: EvolutionChain,
+    @SerializedName("evolves_from_species")
+    val evolvesFromSpecies: EvolvesFromSpecies,
+    @SerializedName("flavor_text_entries")
+    val flavorTextEntries: List<FlavorTextEntry>,
+    @SerializedName("form_descriptions")
+    val formDescriptions: List<FormDescription>,
+    @SerializedName("forms_switchable")
+    val formsSwitchable: Boolean,
+    @SerializedName("gender_rate")
+    val genderRate: Int,
+    @SerializedName("genera")
     val genera: List<Genera>,
+    @SerializedName("generation")
     val generation: Generation,
-    val growth_rate: GrowthRate,
-    val habitat: Habitat,
-    val has_gender_differences: Boolean,
-    val hatch_counter: Int,
+    @SerializedName("growth_rate")
+    val growthRate: GrowthRate,
+    @SerializedName("habitat")
+    val habitat: Any,
+    @SerializedName("has_gender_differences")
+    val hasGenderDifferences: Boolean,
+    @SerializedName("hatch_counter")
+    val hatchCounter: Int,
+    @SerializedName("id")
     val id: Int,
-    val is_baby: Boolean,
-    val is_legendary: Boolean,
-    val is_mythical: Boolean,
+    @SerializedName("is_baby")
+    val isBaby: Boolean,
+    @SerializedName("is_legendary")
+    val isLegendary: Boolean,
+    @SerializedName("is_mythical")
+    val isMythical: Boolean,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("names")
     val names: List<Name>,
+    @SerializedName("order")
     val order: Int,
-    val pal_park_encounters: List<PalParkEncounter>,
-    val pokedex_numbers: List<PokedexNumber>,
+    @SerializedName("pal_park_encounters")
+    val palParkEncounters: List<Any>,
+    @SerializedName("pokedex_numbers")
+    val pokedexNumbers: List<PokedexNumber>,
+    @SerializedName("shape")
     val shape: Shape,
+    @SerializedName("varieties")
     val varieties: List<Variety>
 )
